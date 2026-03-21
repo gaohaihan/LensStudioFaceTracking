@@ -284,7 +284,9 @@ function GetRawRightWeight(){
  * Returns true if the inactive side is moving more than allowed by global.StillnessTolerance.
  * Only applies when one side is toggled off. When both sides are on there is no inactive side.
  *
- * Formula: inactiveSideThreshold = inactiveSideBaseValue + global.StillnessTolerance
+ * Formula: inactiveSideThreshold = inactiveSideBaseValue + 0.01 + global.StillnessTolerance
+ * The +0.01 floor ensures a minimum noise buffer above baseline even when StillnessTolerance
+ * is 0, preventing false violations from sensor noise.
  * If inactiveSideWeight > inactiveSideThreshold → violation.
  *
  * Future consideration: upgrade this to a continuous check throughout the rep window
@@ -304,7 +306,7 @@ function IsInactiveSideViolating() {
     inactiveBaseValue = leftBaseExpressionValue;
   }
 
-  var threshold = inactiveBaseValue + global.StillnessTolerance;
+  var threshold = inactiveBaseValue + 0.01 + global.StillnessTolerance;
   return inactiveWeight > threshold;
 }
 /**

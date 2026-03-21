@@ -94,6 +94,54 @@ Where:
 
 ---
 
+### Stillness Tolerance (Bilateral Only)
+
+When one side of a bilateral exercise is toggled off, the inactive side is monitored at the moment
+of rep detection. If it moves too much, the rep is rejected and a warning event is published.
+
+#### Inactive Side Threshold:
+
+```
+inactiveSideThreshold = inactiveSideBaseValue + 0.01 + stillnessTolerance
+```
+
+Where:
+- `inactiveSideBaseValue` = resting value for the inactive side captured at calibration
+- `0.01` = fixed noise floor, always present regardless of slider — prevents false violations from sensor noise even when tolerance is 0
+- `stillnessTolerance` = user-set slider value from `global.StillnessTolerance` (range: **0.0 to 0.5**)
+
+#### Example:
+
+| Inactive Base | StillnessTolerance | Allowed up to | Inactive weight | Result |
+|---|---|---|---|---|
+| 0.05 | 0.00 | 0.06 | 0.08 | ❌ Rejected (noise floor only) |
+| 0.05 | 0.10 | 0.16 | 0.08 | ✅ Rep counts |
+| 0.05 | 0.10 | 0.16 | 0.20 | ❌ Rejected |
+| 0.05 | 0.30 | 0.36 | 0.20 | ✅ Rep counts (lenient) |
+
+---
+
+### Threshold Comparison: Rep Detection vs. Stillness Tolerance
+
+Both thresholds are anchored to the user's calibrated baseline, but they scale differently:
+
+| | Rep Detection Threshold | Stillness Tolerance Threshold |
+|---|---|---|
+| **Formula** | `(base + 0.01) / (1 - difficulty)` | `base + 0.01 + stillnessTolerance` |
+| **Scaling** | Non-linear — small slider changes near the top of the range have a much larger effect than near the bottom | Linear — each unit of slider movement adds the same fixed amount to the threshold |
+| **Slider effect** | Acts as a multiplier on the base — higher difficulty disproportionately raises the bar | Acts as a direct addition — higher tolerance directly widens the allowed movement range |
+| **At slider = 0** | `base + 0.01` (minimum possible threshold, just above baseline) | `base + 0.01` (same — only noise floor above baseline permitted) |
+| **Noise floor** | `+0.01` baked into numerator | `+0.01` baked in before tolerance addition |
+| **Managed by** | `SensitivityManager.js` → `global.Difficulty` | `StillnessManager.js` → `global.StillnessTolerance` |
+| **Applies to** | Both unilateral and bilateral exercises | Bilateral only, and only when one side is toggled off |
+
+The non-linear scaling of difficulty is intentional: it gives finer-grained control at easier settings
+(where most clinical use happens) and makes the hard end of the range feel meaningfully harder.
+Stillness tolerance uses linear scaling because the clinical concept is simpler — "allow the inactive
+side to move up to X above its resting value" — and a proportional relationship is not needed.
+
+---
+
 ### Rep Counting Logic
 
 A rep is counted using a **hysteresis pattern** to prevent double-counting:
@@ -155,6 +203,7 @@ pubSub.publish(pubSub.EVENTS.SomeEvent, someData);
 | `SetBilateralDetection_Right` | ExpressionController_Bilateral | SettingsUiManager | Set right toggle button state |
 | `ToggleBilateralDetection_Left` | SettingsUiManager | ExpressionController_Bilateral | User toggled left-side detection on/off |
 | `ToggleBilateralDetection_Right` | SettingsUiManager | ExpressionController_Bilateral | User toggled right-side detection on/off |
+| `SetInactiveSideViolation` | ExpressionController_Bilateral | SettingsUiManager | `true` = inactive side exceeded stillness threshold at rep detection (show warning); `false` = cleared |
 | `SetJumpAmount` | ExpressionControllers | SphereController (GameScripts) | Send expression weight to game component |
 | `SetPlatformRotation` | (GameScripts) | (GameScripts) | Game mechanic |
 | `SetJumpCountText` | (GameScripts) | (GameScripts) | Game mechanic |
@@ -174,6 +223,7 @@ pubSub.publish(pubSub.EVENTS.SomeEvent, someData);
 | `InitalizationManager.js` | Captures resting expression baselines at session start |
 | `PauseManager.js` | Manages global pause state |
 | `SensitivityManager.js` | User-adjustable sensitivity/difficulty slider |
+| `StillnessManager.js` | User-adjustable stillness tolerance slider for bilateral inactive-side enforcement |
 | `ExerciseScripts/ExpressionController_Unilateral.js` | Rep/set counting for single-expression exercises |
 | `ExerciseScripts/ExpressionController_Bilateral.js` | Rep/set counting for left/right expression pairs |
 | `My UI Scripts/SettingsUiManager.js` | Settings panel and bilateral toggle button logic |
@@ -203,6 +253,7 @@ pubSub.publish(pubSub.EVENTS.SomeEvent, someData);
 |--------|--------|---------|-------------|
 | `global.Difficulty` | (TBD — see Known Issue) | ExpressionControllers | User difficulty setting (0.0–0.9) |
 | `global.Sensitivity` | SensitivityManager | (TBD — see Known Issue) | Same value, inconsistent naming |
+| `global.StillnessTolerance` | StillnessManager | ExpressionController_Bilateral | Inactive side tolerance (0.0–0.5); added on top of base + 0.01 floor |
 | `global.Pause` | PauseManager | ExpressionControllers | Whether exercise detection is paused |
 | `global.requiredSets` | ExpressionControllers | ExpressionControllers | Sets needed to complete exercise |
 | `global.requiredReps` | ExpressionControllers | ExpressionControllers | Reps per set needed |

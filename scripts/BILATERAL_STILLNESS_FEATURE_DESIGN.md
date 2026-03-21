@@ -41,8 +41,12 @@ much during a rep, that rep should not count.
 At the moment a rep would be counted (active side crosses `currentDifficulty`):
 
 ```
-inactiveSideThreshold = inactiveSideBaseValue + global.StillnessTolerance
+inactiveSideThreshold = inactiveSideBaseValue + 0.01 + global.StillnessTolerance
 ```
+
+The `+0.01` is a fixed noise floor — always present regardless of slider position — matching the
+same floor used in the rep threshold formula. It prevents false violations from sensor noise when
+`StillnessTolerance` is set to 0.
 
 If:
 ```
@@ -61,11 +65,12 @@ Where:
 
 ### Example
 
-| Inactive Base | StillnessTolerance | Allowed up to | Inactive side weight | Result |
+| Inactive Base | StillnessTolerance | Allowed up to (base + 0.01 + tolerance) | Inactive side weight | Result |
 |---|---|---|---|---|
-| 0.05 | 0.10 | 0.15 | 0.08 | ✅ Rep counts |
-| 0.05 | 0.10 | 0.15 | 0.20 | ❌ Rep rejected |
-| 0.05 | 0.30 | 0.35 | 0.20 | ✅ Rep counts (lenient setting) |
+| 0.05 | 0.00 | 0.06 | 0.08 | ❌ Rep rejected (only noise floor) |
+| 0.05 | 0.10 | 0.16 | 0.08 | ✅ Rep counts |
+| 0.05 | 0.10 | 0.16 | 0.20 | ❌ Rep rejected |
+| 0.05 | 0.30 | 0.36 | 0.20 | ✅ Rep counts (lenient setting) |
 
 ---
 

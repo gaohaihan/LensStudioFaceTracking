@@ -7,13 +7,17 @@
  * ExpressionController_Bilateral.IsInactiveSideViolating().
  *
  * Formula (in ExpressionController_Bilateral):
- *   inactiveSideThreshold = inactiveSideBaseValue + global.StillnessTolerance
+ *   inactiveSideThreshold = inactiveSideBaseValue + 0.01 + global.StillnessTolerance
+ *
+ * The +0.01 is a fixed noise floor — always present regardless of slider position — to prevent
+ * false violations from sensor noise when tolerance is set to 0.
+ * global.StillnessTolerance is the user-adjustable portion on top of that floor.
  *
  * Slider range: 0.0 to 0.5 (capped at 0.5)
- *   Low value  → strict, inactive side must barely move above baseline
- *   High value → lenient, inactive side can move more before rejecting a rep
+ *   0.0 → threshold = baseValue + 0.01 (strictest — only noise floor above baseline allowed)
+ *   0.5 → threshold = baseValue + 0.51 (most lenient — inactive side can move significantly)
  *
- * Default: 0.1 — a small tolerance above baseline to account for natural micro-movement.
+ * Default: 0.1 — a modest tolerance above the noise floor for early-stage therapy.
  *
  * Input:
  *   sliderScript — ScriptComponent with a getSliderValue() API (same pattern as SensitivityManager)
