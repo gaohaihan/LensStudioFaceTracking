@@ -1,4 +1,45 @@
 // -----JS CODE-----
+/**
+ * SettingsUiManager.js — Settings Panel and Bilateral Toggle Button Manager
+ *
+ * Manages the settings UI panel visibility and the bilateral side-detection toggle buttons.
+ * The bilateral toggles allow the user to choose which side(s) of a bilateral expression
+ * to detect — useful for patients with asymmetric facial ability.
+ *
+ * UI Panels:
+ *   difficultyUI  — Difficulty/sensitivity slider panel
+ *   countUI       — Rep/set count display panel
+ *   controlsUI    — Exercise control buttons panel
+ *   bilateralUI   — Left/right detection toggle panel
+ *   debugUI       — Debug info panel (expression weights, thresholds)
+ *
+ * Bilateral Toggle Constraint:
+ *   Both sides cannot be turned off simultaneously. If the user tries to turn off one side
+ *   while the other is already off, the other side is automatically turned back on.
+ *   This is enforced in ToggleOffLeft() and ToggleOffRight().
+ *
+ * Exposed script methods (called by UI button tap events):
+ *   script.ToggleUI          → shows/hides the settings panels
+ *   script.ToggleDebugUI     → shows/hides the debug panel
+ *   script.ToggleOn_Left     → turns on left-side detection
+ *   script.ToggleOn_Right    → turns on right-side detection
+ *   script.ToggleOff_Left    → turns off left-side detection (auto-enables right if needed)
+ *   script.ToggleOff_Right   → turns off right-side detection (auto-enables left if needed)
+ *
+ * PubSub events published:
+ *   ToggleBilateralDetection_Left  — notifies ExpressionController of left toggle state
+ *   ToggleBilateralDetection_Right — notifies ExpressionController of right toggle state
+ *
+ * PubSub events subscribed:
+ *   SetBilateralDetection_Left  — syncs left toggle button state from exercise controller
+ *   SetBilateralDetection_Right — syncs right toggle button state from exercise controller
+ *   SetBilateralDetection       — enables/disables the bilateral toggle buttons entirely
+ *                                  (disabled for unilateral exercises)
+ *
+ * Inputs:
+ *   bilateralToggle_left  — ScriptComponent with toggleOn()/toggleOff()/getToggleValue() API
+ *   bilateralToggle_right — ScriptComponent with toggleOn()/toggleOff()/getToggleValue() API
+ */
 // @input SceneObject difficultyUI
 // @input SceneObject countUI
 // @input SceneObject controlsUI

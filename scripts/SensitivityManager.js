@@ -1,4 +1,23 @@
 // -----JS CODE-----
+/**
+ * SensitivityManager.js — User Difficulty / Sensitivity Setting
+ *
+ * Provides a slider UI that lets the user adjust how difficult exercises are.
+ * The slider value is stored as global.Sensitivity (range: 0.0 to 0.9; capped at 0.9
+ * because a value of 1.0 would make the rep threshold infinite).
+ *
+ * The sensitivity value scales the rep-detection threshold in ExpressionController scripts:
+ *   threshold = (baseExpressionValue + 0.01) / (1 - difficulty)
+ * A higher sensitivity → higher threshold → user must express more to count a rep.
+ *
+ * NOTE: This script sets global.Sensitivity, but ExpressionController scripts read
+ * global.Difficulty. Verify these are wired together correctly and consider
+ * standardizing to one global variable name.
+ *
+ * Inputs:
+ *   sliderScript — ScriptComponent with a getSliderValue() API
+ *   faceMesh     — RenderMeshVisual used to sample resting expression weights (GetExpressionMinValues, currently unused/TODO)
+ */
 // @input Component.ScriptComponent sliderScript
 // @input Component.RenderMeshVisual faceMesh
 

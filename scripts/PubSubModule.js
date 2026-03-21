@@ -1,3 +1,19 @@
+/**
+ * PubSubModule.js — Event Bus
+ *
+ * Central publish-subscribe module used for all inter-script communication in the app.
+ * Scripts should NEVER call each other directly — they publish and subscribe to named events
+ * defined in the EVENTS constant below.
+ *
+ * Usage:
+ *   const pubSub = require("./PubSubModule");
+ *   pubSub.subscribe(pubSub.EVENTS.SomeEvent, (data) => { ... });
+ *   pubSub.publish(pubSub.EVENTS.SomeEvent, someData);
+ *
+ * EVENTS:    Named string constants for all app events. Always use these constants (never raw
+ *            strings) so typos are caught at reference time rather than silently failing at runtime.
+ * EXPRESSIONS: Named string constants for Snap face mesh expression names used in the app.
+ */
 let subscribers = {};
 
 const EVENTS = {

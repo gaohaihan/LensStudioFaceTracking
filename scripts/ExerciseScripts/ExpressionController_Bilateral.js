@@ -1,4 +1,45 @@
 // -----JS CODE-----
+/**
+ * ExpressionController_Bilateral.js — Rep/Set Counter for Left/Right Split Exercises
+ *
+ * Handles facial expression exercises where the expression is split into left and right sides
+ * (e.g. "squintLeft" and "squintRight"). By default, both sides are averaged together.
+ * The user (or therapist) can toggle individual sides off via the settings UI to accommodate
+ * patients with asymmetric ability (e.g. facial paralysis on one side).
+ *
+ * Each instance represents one exercise and activates when GameManager publishes
+ * ExpressionIndexEnabled with a matching expressionIndex.
+ *
+ * Side Toggle Behavior:
+ *   - Both sides ON: combinedWeight = (leftWeight + rightWeight) / 2
+ *   - Right side OFF: only rightWeight is used (camera-mirrored — see note below)
+ *   - Left side OFF: only leftWeight is used
+ *   - Both OFF: error state (prevented by SettingsUiManager which forces one side always on)
+ *
+ * Camera Mirroring Note:
+ *   Due to the selfie camera being mirrored, expression labels are flipped visually.
+ *   When the user turns off "left detection" in the UI, isLeftDetectionOn = false,
+ *   and the code returns leftWeight (the expression labeled "left" by Snap maps to the
+ *   user's right side as they see it in the mirror). This is intentional.
+ *
+ * Rep Threshold Formula:
+ *   Both sides ON: threshold = ((leftBase + rightBase) / 2 + 0.05) / (1 - difficulty)
+ *   One side OFF:  threshold = (singleSideBase + 0.01) / (1 - difficulty)
+ *   where difficulty = global.Difficulty (0.0–0.9). Capped at 1.0.
+ *
+ * Inputs:
+ *   target          — FaceMaskVisual whose opacity tracks combined expression intensity
+ *   faceMesh        — RenderMeshVisual used to read expression weights each frame
+ *   expressionRight — Snap expression name for the right-side expression (e.g. "squintRight")
+ *   expressionLeft  — Snap expression name for the left-side expression (e.g. "squintLeft")
+ *   displayText     — Instruction text shown during exercise
+ *   finishText      — Text shown when all sets/reps are completed
+ *   completedSets   — Tracks sets completed (reset to 0 when exercise activates)
+ *   completedReps   — Tracks reps in current set (reset to 0 when exercise activates)
+ *   baseDifficulty  — (Unused — difficulty read from global.Difficulty)
+ *   expressionIndex — Integer index identifying this exercise in the sequence (starts at 0)
+ *   apiScript       — (Unused reference, was used for remote data logging)
+ */
 // @input Component.FaceMaskVisual target
 // @input Component.RenderMeshVisual faceMesh
 // @input string expressionRight

@@ -1,4 +1,37 @@
 // -----JS CODE-----//
+/**
+ * GameManager.js — Top-Level Exercise Flow Controller
+ *
+ * Orchestrates the overall exercise session: starting, navigating between exercises,
+ * and pausing. Acts as the entry point for user-initiated actions (start button,
+ * prev/next buttons, pause button).
+ *
+ * Exercise Sequence Flow:
+ *   1. User presses Start → InitializeBaseExpressionsThenStart() fires
+ *   2. A 3-second delay allows the user to hold a neutral expression for calibration
+ *   3. InitializeBaseExpressions event is published → InitalizationManager captures baselines
+ *   4. After delay, EnableFirstExercise() publishes ExpressionIndexEnabled(0)
+ *   5. The ExpressionController with expressionIndex == 0 activates and begins detecting
+ *   6. User presses Next/Prev → currentIndex changes → ExpressionIndexEnabled(newIndex) published
+ *   7. ExpressionControllers enable/disable themselves based on whether their index matches
+ *
+ * Exposed script methods (callable from Lens Studio UI button components):
+ *   script.Start        → InitializeBaseExpressionsThenStart
+ *   script.Next         → GoToNextExercise
+ *   script.Previous     → GoToPreviousExercise
+ *   script.PauseUnPause → toggles pause state
+ *   script.ReInit       → re-triggers base expression calibration
+ *
+ * Inputs:
+ *   expressionTitleText — Text component for exercise title display
+ *   UiParent            — Parent SceneObject for exercise UI
+ *   startButton         — Disabled after start so user cannot restart mid-session
+ *   prevButton          — Hidden when at first exercise (index 0)
+ *   nextButton          — Hidden when at last exercise (index == maxIndex)
+ *   maxIndex            — The index of the last exercise (0-based)
+ *   remoteServiceModule — For API integration
+ *   apiScript           — ScriptComponent with makeRequest() called every frame
+ */
 // @input Component.Text expressionTitleText
 // @input SceneObject UiParent
 // @input SceneObject startButton

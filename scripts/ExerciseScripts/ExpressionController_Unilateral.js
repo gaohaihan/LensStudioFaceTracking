@@ -1,4 +1,45 @@
 // -----JS CODE-----
+/**
+ * ExpressionController_Unilateral.js — Rep/Set Counter for Single-Expression Exercises
+ *
+ * Handles one facial expression exercise where the expression is a single measurement
+ * (not split left/right). Examples: JawOpen, BrowsUpCenter.
+ *
+ * Each instance represents one exercise in the sequence and is identified by its
+ * expressionIndex. It activates when GameManager publishes ExpressionIndexEnabled
+ * with a matching index, and deactivates otherwise.
+ *
+ * Rep Counting Logic (CountReps mode):
+ *   A rep is counted when rawWeight exceeds the threshold (midRep transitions false→true).
+ *   The expression must return below the threshold before the next rep is counted (hysteresis).
+ *   When completedReps >= requiredReps, a set is completed and reps reset to 0.
+ *   When completedSets >= requiredSets, Finished() is called and the prompt text updates.
+ *
+ * Timer Mode (HoldExpression):
+ *   Alternative mode controlled by global.isTimer. Instead of counting reps by discrete
+ *   movements, the user holds the expression. global.timerUpdate signals a timer script
+ *   (1 = expression held/start timer, 2 = expression dropped/stop timer).
+ *   global.complete == 1 signals the exercise is done.
+ *
+ * Rep Threshold Formula:
+ *   threshold = (baseExpressionValue + 0.01) / (1 - difficulty)
+ *   where baseExpressionValue is the user's resting value captured at calibration,
+ *   and difficulty = global.Difficulty (0.0 = easiest, 0.9 = hardest). Capped at 1.0.
+ *
+ * This controller also disables the bilateral detection UI (not applicable to unilateral exercises).
+ *
+ * Inputs:
+ *   target          — FaceMaskVisual whose opacity tracks expression intensity (visual feedback)
+ *   faceMesh        — RenderMeshVisual used to read expression weights each frame
+ *   expression      — Snap expression name string (e.g. "JawOpen")
+ *   displayText     — Instruction text shown during the exercise
+ *   finishText      — Text shown when all sets/reps are completed
+ *   completedSets   — Tracks sets completed (reset to 0 when exercise activates)
+ *   completedReps   — Tracks reps in current set (reset to 0 when exercise activates)
+ *   baseDifficulty  — (Unused — difficulty is read from global.Difficulty)
+ *   expressionIndex — Integer index identifying this exercise in the sequence (starts at 0)
+ *   apiScript       — (Unused reference, was used for remote data logging)
+ */
 // @input Component.FaceMaskVisual target
 // @input Component.RenderMeshVisual faceMesh
 // @input string expression
