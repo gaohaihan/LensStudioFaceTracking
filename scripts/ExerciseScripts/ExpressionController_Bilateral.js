@@ -39,6 +39,14 @@
  *   baseDifficulty  — (Unused — difficulty read from global.Difficulty)
  *   expressionIndex — Integer index identifying this exercise in the sequence (starts at 0)
  *   apiScript       — (Unused reference, was used for remote data logging)
+ *
+ * Global dependencies:
+ *   global.Difficulty         — set by SensitivityManager (or equivalent); controls rep threshold
+ *   global.StillnessTolerance — set by StillnessManager; controls how much the inactive side
+ *                               may move before a rep is rejected. Defaults to 0.1.
+ *                               StillnessManager.js must be present in the scene for this to
+ *                               be initialized; otherwise IsInactiveSideViolating() will compare
+ *                               against undefined and always return false.
  */
 // @input Component.FaceMaskVisual target
 // @input Component.RenderMeshVisual faceMesh
@@ -190,21 +198,29 @@ function CountReps() {
 
     var rawWeight = GetRawExpressionWeight();
     if (rawWeight > currentDifficulty && midRep !== true){
-      midRep = true;
-      print("rep counted, raw weight: " + rawWeight.toString() + " current difficulty: " + currentDifficulty.toString());
-      script.completedReps += 1
-      //script.apiScript.sendDataToSite('completedReps', script.completedReps);
-      if (script.completedReps >= global.requiredReps){
-          script.completedSets += 1;
-          script.completedReps = 0;
+      if (IsInactiveSideViolating()) {
+        // Inactive side moved too much — reject rep and warn user
+        pubSub.publish(pubSub.EVENTS.SetInactiveSideViolation, true);
+      } else {
+        pubSub.publish(pubSub.EVENTS.SetInactiveSideViolation, false);
+        midRep = true;
+        print("rep counted, raw weight: " + rawWeight.toString() + " current difficulty: " + currentDifficulty.toString());
+        script.completedReps += 1
+        //script.apiScript.sendDataToSite('completedReps', script.completedReps);
+        if (script.completedReps >= global.requiredReps){
+            script.completedSets += 1;
+            script.completedReps = 0;
+        }
+        pubSub.publish(pubSub.EVENTS.SetExpressionSetText,  script.completedSets.toString() );
+        pubSub.publish(pubSub.EVENTS.SetExpressionRepText,  script.completedReps.toString());
       }
-      pubSub.publish(pubSub.EVENTS.SetExpressionSetText,  script.completedSets.toString() );
-      pubSub.publish(pubSub.EVENTS.SetExpressionRepText,  script.completedReps.toString());
     }
 
     var rawWeight = GetRawExpressionWeight();
     if (rawWeight <= currentDifficulty && midRep === true){
       midRep = false;
+      // Clear any active violation warning when expression returns to baseline
+      pubSub.publish(pubSub.EVENTS.SetInactiveSideViolation, false);
     }
  }
 
@@ -262,6 +278,34 @@ function GetRawLeftWeight(){
 
 function GetRawRightWeight(){
   return  script.faceMesh.mesh.control.getExpressionWeightByName(script.expressionRight);
+}
+
+/**
+ * Returns true if the inactive side is moving more than allowed by global.StillnessTolerance.
+ * Only applies when one side is toggled off. When both sides are on there is no inactive side.
+ *
+ * Formula: inactiveSideThreshold = inactiveSideBaseValue + global.StillnessTolerance
+ * If inactiveSideWeight > inactiveSideThreshold → violation.
+ *
+ * Future consideration: upgrade this to a continuous check throughout the rep window
+ * (from midRep = true until midRep = false) rather than only at the moment of rep detection.
+ */
+function IsInactiveSideViolating() {
+  if (isLeftDetectionOn && isRightDetectionOn) return false;
+
+  var inactiveWeight;
+  var inactiveBaseValue;
+
+  if (!isRightDetectionOn) {
+    inactiveWeight = GetRawRightWeight();
+    inactiveBaseValue = rightBaseExpressionValue;
+  } else {
+    inactiveWeight = GetRawLeftWeight();
+    inactiveBaseValue = leftBaseExpressionValue;
+  }
+
+  var threshold = inactiveBaseValue + global.StillnessTolerance;
+  return inactiveWeight > threshold;
 }
 /**
  * Display finished text

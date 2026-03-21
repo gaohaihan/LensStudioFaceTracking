@@ -44,6 +44,9 @@ const EVENTS = {
     SetBilateralDetection_Left: 'SetBilateralDetection_Left',
     SetBilateralDetection_Right: ' SetBilateralDetection_Right',
     SetBilateralDetection: 'SetBilateralDetection',
+    // Published by ExpressionController_Bilateral when the inactive side moves beyond
+    // the stillness tolerance at the moment of rep detection. true = violation, false = cleared.
+    SetInactiveSideViolation: 'SetInactiveSideViolation',
 
     // EVENTS FOR GAME
     SetPlatformRotation: "SetPlatformRotation",

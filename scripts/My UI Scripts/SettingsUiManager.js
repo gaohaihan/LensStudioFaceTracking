@@ -39,6 +39,13 @@
  * Inputs:
  *   bilateralToggle_left  — ScriptComponent with toggleOn()/toggleOff()/getToggleValue() API
  *   bilateralToggle_right — ScriptComponent with toggleOn()/toggleOff()/getToggleValue() API
+ *
+ * TODO — Scene Setup required:
+ *   1. Add a warning UI element (e.g. Text or Image SceneObject) to the scene to display
+ *      when the inactive side moves too much during a rep.
+ *   2. Declare it as an input below: // @input SceneObject violationWarning
+ *   3. In the SetInactiveSideViolation subscription below, replace the print() call with:
+ *        script.violationWarning.enabled = data;
  */
 // @input SceneObject difficultyUI
 // @input SceneObject countUI
@@ -147,6 +154,16 @@ pubSub.subscribe(pubSub.EVENTS.SetBilateralDetection_Right, (data) => {
                 break;
         }
     }
+});
+
+/***
+ * Called when the inactive side moves beyond the stillness tolerance at the moment of
+ * rep detection. data = true means a violation is active (show warning), false = cleared.
+ * Implement your chosen visual warning display here.
+ */
+pubSub.subscribe(pubSub.EVENTS.SetInactiveSideViolation, (data) => {
+    // TODO: replace this print with your warning UI element (see Scene Setup in header above)
+    print("Inactive side violation: " + data);
 });
 
 /***
