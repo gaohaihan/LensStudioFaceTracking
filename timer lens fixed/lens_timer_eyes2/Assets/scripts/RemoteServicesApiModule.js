@@ -11,7 +11,7 @@
 function handleAPIResponse(response, cb) {
     if (response.statusCode !== 1) {
         var errorMessage = getErrorMessage(response);
-        print(errorMessage);
+    //    print(errorMessage);
         cb(true, errorMessage);
     } else {
         try {

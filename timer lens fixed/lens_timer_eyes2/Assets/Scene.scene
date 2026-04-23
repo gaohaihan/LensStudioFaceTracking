@@ -4,6 +4,7 @@
     - !<own> 0005641c-028d-459a-0000-000000014b4d
     - !<own> ab036d47-476a-4dfd-b723-f7adb1a76dbb
     - !<own> 9221a016-678f-445d-952a-59edca15331d
+    - !<own> bf0f53a4-0724-4bf6-b75a-85499189fa17
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -124,6 +125,22 @@
   DecayType: None
   DecayLimit: false
   DecayRange: 40.000000
+- !<ScriptComponent/00753f80-687c-4cee-a5c5-fd6bbcba377d>
+  PrefabRemaps:
+    []
+  Name: Untitled JavaScript 8
+  Enabled: true
+  ScriptAsset: !<reference> 886feb38-039e-40cd-9e01-3636425ac4fc
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      {}
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/039c511b-37bc-4ca6-b02d-127516a769d9>
   PrefabRemaps:
     []
@@ -1480,6 +1497,21 @@
     CapitalizationOverride: None
   DepthTest: false
   TwoSided: false
+- !<SceneObject/25377814-baf4-48b9-818c-e684857ffcd8>
+  PrefabRemaps:
+    []
+  Name: InitializationManager
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> e95da96c-326e-4ae1-ad99-d2e2e116945e
 - !<SceneObject/254b812f-6857-42b2-8d12-f9176896ade7>
   PrefabRemaps:
     []
@@ -3093,6 +3125,25 @@
     []
   Components:
     - !<own> 4b355f77-c92e-4629-aa65-3a7fd4311099
+- !<ScriptComponent/45ff47d4-118c-4fe4-b929-fec0b4a014f0>
+  PrefabRemaps:
+    []
+  Name: RemoteServicesApi
+  Enabled: true
+  ScriptAsset: !<reference> c1acc4f2-b399-42c1-8c72-22c5d6523c50
+  ScriptInputsDefault:
+    settingUI: true
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      remoteServiceModule: !<reference.RemoteServiceModule> d2642867-176f-4080-8851-1ff007c8b9a7
+      responseData: !<reference.Text> 993c87c7-6763-4208-8e08-57ea7b3fcea2
+      gameManager: !<reference.ScriptComponent> 508a9868-09fd-484d-a710-68c682f40632
+      settingUI: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    "":
+      {}
 - !<ScreenTransform/46bf9dca-65dd-4a78-962b-f965d0ce60d7>
   PrefabRemaps:
     []
@@ -3708,8 +3759,7 @@
   Enabled: true
   ScriptAsset: !<reference> 18ee3dd2-aef0-4393-b3da-6b28992f0035
   ScriptInputsDefault:
-    remoteServiceModule: true
-    apiScript: true
+    maxIndex: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -3719,9 +3769,9 @@
       startButton: !<reference.SceneObject> 31805c08-1738-409a-a0e1-f272d9610b83
       prevButton: !<reference.SceneObject> 55eab32c-7dff-4183-8561-7933317c9351
       nextButton: !<reference.SceneObject> 17ec285a-58dd-49eb-b7c8-d2c22ab785b4
-      maxIndex: !<float> 5.000000
-      remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
-      apiScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      maxIndex: !<float> 2.000000
+      remoteServiceModule: !<reference.RemoteServiceModule> 71692066-c17c-4d64-a5b5-e7adce62fa76
+      apiScript: !<reference.ScriptComponent> 45ff47d4-118c-4fe4-b929-fec0b4a014f0
   ScriptTypes:
     "":
       {}
@@ -4665,6 +4715,22 @@
     []
   Components:
     - !<own> ea01cc7a-e4b3-4390-8606-488633746622
+- !<ScriptComponent/6c0203f4-3b49-4f9b-952c-28731b644e27>
+  PrefabRemaps:
+    []
+  Name: Untitled JavaScript 7
+  Enabled: true
+  ScriptAsset: !<reference> 5c28d4fa-44a2-463a-87bb-c4a64ca116cb
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      {}
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/6d10217e-0ece-41a7-92b3-9c2dad483ea0>
   PrefabRemaps:
     []
@@ -7988,6 +8054,21 @@
   Components:
     - !<own> 9ab976bc-1510-4482-9415-254156e86477
     - !<own> 16221c1b-98ec-4da8-8e01-e3d4a6413092
+- !<SceneObject/bf0f53a4-0724-4bf6-b75a-85499189fa17>
+  PrefabRemaps:
+    []
+  Name: RemoteServicesApi
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 45ff47d4-118c-4fe4-b929-fec0b4a014f0
 - !<SceneObject/c0467709-e2e7-4126-ae6c-b875d0a6161e>
   PrefabRemaps:
     []
@@ -8299,8 +8380,10 @@
     - !<own> 5d6ac81d-2e1f-49bf-9075-9d401e4b7554
     - !<own> 254b812f-6857-42b2-8d12-f9176896ade7
     - !<own> 7076fe2e-18cd-4699-9c30-df233b7a2486
+    - !<own> 25377814-baf4-48b9-818c-e684857ffcd8
   Components:
-    []
+    - !<own> 6c0203f4-3b49-4f9b-952c-28731b644e27
+    - !<own> 00753f80-687c-4cee-a5c5-fd6bbcba377d
 - !<SceneObject/c8c8514e-9521-454a-96c7-226ca7c52b7b>
   PrefabRemaps:
     []
@@ -9202,6 +9285,26 @@
     - !<own> d0e73df9-5c6a-40fa-85de-42722bd34d43
   Components:
     []
+- !<ScriptComponent/e95da96c-326e-4ae1-ad99-d2e2e116945e>
+  PrefabRemaps:
+    []
+  Name: InitializationManager
+  Enabled: true
+  ScriptAsset: !<reference> 80236daf-8819-47d1-bdfa-34313bc75523
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      faceMesh: !<reference.RenderMeshVisual> e0ad8839-150b-40a8-9d96-f40572bd8ab7
+      expressionNames: !<string[]>
+        - EyeBlink
+        - BrowsDownLeft
+        - BrowsUpLeft
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/e992951a-bf26-4047-b184-fb4ca0d8a616>
   PrefabRemaps:
     []
