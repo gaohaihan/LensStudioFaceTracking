@@ -28,15 +28,13 @@ global.timerUpdate = 0;
 * Called once when onAwake
 */
  function InitializeUserBaseExpressionValue(){
-  var functionsToCallAfterDelay = [Initialize, BindFunctionToRunEveryUpdate]
-  StartDelay(3, functionsToCallAfterDelay);
-  GetBaseExpressionValue();
+  Initialize();
+  BindFunctionToRunEveryUpdate();
 }
 
 function Initialize(){
    // Set initial values
-   currentDifficulty = BaseExpressionValue + 0.05;
-   midRep = false;
+currentDifficulty = GetExpressionByNameBaseValue(script.expression) + 0.01;   midRep = false;
    color = script.target.getMaterial(0).getPass(0).baseColor;
    difficulty = global.Difficulty;
    global.timerUpdate = 0;
@@ -53,6 +51,19 @@ function Initialize(){
 
 }
 
+/**
+ * Get an expression from the sequence by its name
+ */
+function GetExpressionByNameBaseValue(expressionName) {
+   for (let i = 0; i < global.SequenceExpression.length; i++) {
+      if (global.SequenceExpression[i].name === expressionName) {
+        BaseExpressionValue = global.SequenceExpression[i].baseValue;
+         return global.SequenceExpression[i].baseValue;
+      }
+   }
+   return null;
+}
+
 /***
 * Set functions to be called every frame
 */
@@ -63,7 +74,7 @@ function BindFunctionToRunEveryUpdate(eventName, methodsToBind) {
 
 /***
 * Grab user base expression values
-*/
+
 function GetBaseExpressionValue() {
   global.timerEnabled = false;
   pubSub.publish(pubSub.EVENTS.SetExpressionPromptText, "Initializing, please not move for 3s");
@@ -72,7 +83,7 @@ function GetBaseExpressionValue() {
 
 /***
 * Start with a delay and invoke methods in list after delay complete
-*/
+
 function StartDelay(seconds, functionList){
    var delayedEvent = script.createEvent("DelayedCallbackEvent");
    delayedEvent.bind(function(eventData)
@@ -85,10 +96,11 @@ function StartDelay(seconds, functionList){
 
 /**
  * function that executes all given functions
- */
+ 
 function executeFunctions(eventData, functions) {
   functions.forEach(func => func(eventData));
 }
+*/
 
 /***
 * Things to be called every frame
@@ -259,20 +271,4 @@ pubSub.subscribe(pubSub.EVENTS.ExpressionIndexEnabled, (data) => {
   }
 });
 
-/**
- * Pause exercise and reinit base expression value.
- */
-pubSub.subscribe(pubSub.EVENTS.ReInitializeBaseExpression, () => {
-  var functionsToCallAfterDelay = [Initialize, BindFunctionToRunEveryUpdate, UnPause]
-
-  // Publish timer reset event
-  pubSub.publish(pubSub.EVENTS.Pause);
-
-  StartDelay(3, functionsToCallAfterDelay);
-  GetBaseExpressionValue();
-
-  function UnPause(){
-    pubSub.publish(pubSub.EVENTS.UnPause)
-  }
-});
 

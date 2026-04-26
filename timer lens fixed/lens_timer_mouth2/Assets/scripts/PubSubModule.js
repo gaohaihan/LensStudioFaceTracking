@@ -26,7 +26,7 @@ const EVENTS = {
     ToggleBilateralDetection_Left: 'ToggleBilateralDetection_Left',
     ToggleBilateralDetection_Right: 'ToggleBilateralDetection_Right',
     SetBilateralDetection_Left: 'SetBilateralDetection_Left',
-    SetBilateralDetection_Right: ' SetBilateralDetection_Right',
+    SetBilateralDetection_Right: 'SetBilateralDetection_Right',
     SetBilateralDetection: 'SetBilateralDetection',
 
     // EVENTS FOR BALANCE GAME

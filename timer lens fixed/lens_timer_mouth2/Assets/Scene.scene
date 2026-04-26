@@ -4,6 +4,7 @@
     - !<own> 0005641c-028d-459a-0000-000000014b4d
     - !<own> ab036d47-476a-4dfd-b723-f7adb1a76dbb
     - !<own> 9221a016-678f-445d-952a-59edca15331d
+    - !<own> 0745175a-4d75-4375-af52-83ea2ce28e0e
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -187,6 +188,21 @@
   Components:
     - !<own> 633dda3b-1ffc-4d6e-9f26-91a39e4a1451
     - !<own> 7b04a168-1c79-452d-baaa-0eaf6532fa91
+- !<SceneObject/0745175a-4d75-4375-af52-83ea2ce28e0e>
+  PrefabRemaps:
+    []
+  Name: RemoteServicesApi
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 104eec98-3d81-4886-b83a-9fdd0150a9b4
 - !<Image/076773c2-af96-4382-a594-2c38355bc626>
   PrefabRemaps:
     []
@@ -789,6 +805,25 @@
     bottom: 0.000000
     right: 0.000000
     top: 0.000000
+- !<ScriptComponent/104eec98-3d81-4886-b83a-9fdd0150a9b4>
+  PrefabRemaps:
+    []
+  Name: RemoteServicesApi
+  Enabled: true
+  ScriptAsset: !<reference> c1acc4f2-b399-42c1-8c72-22c5d6523c50
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      remoteServiceModule: !<reference.RemoteServiceModule> d2642867-176f-4080-8851-1ff007c8b9a7
+      responseData: !<reference.Text> 993c87c7-6763-4208-8e08-57ea7b3fcea2
+      gameManager: !<reference.ScriptComponent> 508a9868-09fd-484d-a710-68c682f40632
+      settingUI: !<reference.ScriptComponent> a72a28fb-8326-4c40-abf5-8caea669588b
+  ScriptTypes:
+    "":
+      {}
 - !<FaceMaskVisual/108c82e4-d423-4265-b85d-886a57ef360d>
   PrefabRemaps:
     []
@@ -1882,6 +1917,7 @@
   Enabled: true
   ScriptAsset: !<reference> 832601d1-c899-4e9e-92a5-2f51f0375be7
   ScriptInputsDefault:
+    expression: true
     completedSets: true
     completedReps: true
     apiScript: true
@@ -1891,7 +1927,7 @@
     "":
       target: !<reference.FaceMaskVisual> 3458d8f6-f07f-4210-8793-cba761a265a9
       faceMesh: !<reference.RenderMeshVisual> e0ad8839-150b-40a8-9d96-f40572bd8ab7
-      expression: Puff
+      expression: ""
       displayText: Puff your mouth!
       finishText: "You're Finished! "
       completedSets: !<float> 0.000000
@@ -4089,8 +4125,7 @@
   Enabled: true
   ScriptAsset: !<reference> 18ee3dd2-aef0-4393-b3da-6b28992f0035
   ScriptInputsDefault:
-    remoteServiceModule: true
-    apiScript: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -4101,8 +4136,8 @@
       prevButton: !<reference.SceneObject> 55eab32c-7dff-4183-8561-7933317c9351
       nextButton: !<reference.SceneObject> 17ec285a-58dd-49eb-b7c8-d2c22ab785b4
       maxIndex: !<float> 5.000000
-      remoteServiceModule: !<reference.RemoteServiceModule> 00000000-0000-0000-0000-000000000000
-      apiScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      remoteServiceModule: !<reference.RemoteServiceModule> 71692066-c17c-4d64-a5b5-e7adce62fa76
+      apiScript: !<reference.ScriptComponent> 104eec98-3d81-4886-b83a-9fdd0150a9b4
   ScriptTypes:
     "":
       {}
@@ -5234,6 +5269,21 @@
     - !<own> c6eee367-d610-4e0c-b4b8-53dbecee7342
   Components:
     - !<own> b84a4d97-57d0-4306-be1c-05dc9ae1ff97
+- !<SceneObject/72928e4f-194f-439c-bbac-18c6f73858df>
+  PrefabRemaps:
+    []
+  Name: InitializationManager
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 40.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> dba4fd7a-56ce-4fb9-9e34-a96ddd0d8dd5
 - !<SceneObject/72edb74d-124a-4176-93bd-684fdade5ebd>
   PrefabRemaps:
     []
@@ -8766,6 +8816,7 @@
     - !<own> 5d6ac81d-2e1f-49bf-9075-9d401e4b7554
     - !<own> 254b812f-6857-42b2-8d12-f9176896ade7
     - !<own> 7076fe2e-18cd-4699-9c30-df233b7a2486
+    - !<own> 72928e4f-194f-439c-bbac-18c6f73858df
   Components:
     []
 - !<SceneObject/c8c8514e-9521-454a-96c7-226ca7c52b7b>
@@ -9272,6 +9323,29 @@
     bottom: 0.000000
     right: 0.000000
     top: 0.000000
+- !<ScriptComponent/dba4fd7a-56ce-4fb9-9e34-a96ddd0d8dd5>
+  PrefabRemaps:
+    []
+  Name: InitializationManager
+  Enabled: true
+  ScriptAsset: !<reference> 80236daf-8819-47d1-bdfa-34313bc75523
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      faceMesh: !<reference.RenderMeshVisual> e0ad8839-150b-40a8-9d96-f40572bd8ab7
+      expressionNames: !<string[]>
+        - JawOpen
+        - MouthSmileLeft
+        - MouthFrownLeft
+        - LipsPucker
+        - LipsFunnel
+        - MouthDimple
+  ScriptTypes:
+    "":
+      {}
 - !<Image/dc728b43-4f02-4744-ab12-f516f186ca6e>
   PrefabRemaps:
     []
